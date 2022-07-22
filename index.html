@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Parcel Sandbox</title>
+    <meta charset="UTF-8" />
+    <link href="src/styles.css" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <div class="container shadow-lg rounded -border border-warning">
+      <div class="row border-bottom mb-3 py-1 cities">
+        <div class="col text-center">
+          <button class="btn">Lviv</button>
+        </div>
+        <div class="col text-center">
+          <button class="btn">Dnipro</button>
+        </div>
+        <div class="col text-center">
+          <button class="btn">Kyiv</button>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3"></div>
+        <div class="col-6">
+          <form id="search-form">
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Choose the city"
+                aria-label="Choose the city"
+                aria-describedby="button-addon2"
+                id="new-city-input"
+              />
+              <button
+                class="btn btn-outline-secondary"
+                type="submit"
+                id="button-addon2"
+              >
+                🔍
+              </button>
+            </div>
+          </form>
+          <button
+            class="btn btn-outline-secondary"
+            type="submit"
+            id="current-location"
+          >
+            Current location
+          </button>
+        </div>
+        <div class="col-3"></div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-6 text-center">
+          <h1 class="current-city" id="current-city">Lviv</h1>
+          <div class="current-temp">
+            +<span id="current-temp">21</span>
+            <span class="units">
+              <a href="#" id="celsius">°C</a> |
+              <a href="#" id="farengheit">°F</a>
+            </span>
+          </div>
+
+          <p class="current-weather">Sunny</p>
+          <p id="current-date-time"></p>
+        </div>
+        <div class="col-6 text-center">
+          <p class="current-weather-icon">☀️</p>
+        </div>
+      </div>
+      <div class="row pb-3">
+        <div class="col-2">
+          <div class="card text-center">
+            <div class="card-header bg-warning text-black">Mon</div>
+            <div class="card-body">
+              <p class="card-text fs-2">☀️</p>
+              <p class="card-text">+26°C</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="card text-center">
+            <div class="card-header bg-warning text-black">Tue</div>
+            <div class="card-body">
+              <p class="card-text fs-2">☁️</p>
+              <p class="card-text">+21°C</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="card text-center">
+            <div class="card-header bg-warning text-black">Wed</div>
+            <div class="card-body">
+              <p class="card-text fs-2">🌧️</p>
+              <p class="card-text">+21°C</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="card text-center">
+            <div class="card-header bg-warning text-black">Thu</div>
+            <div class="card-body">
+              <p class="card-text fs-2">☀️</p>
+              <p class="card-text">+26°C</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="card text-center">
+            <div class="card-header bg-warning text-black">Fri</div>
+            <div class="card-body">
+              <p class="card-text fs-2">☀️</p>
+              <p class="card-text">+28°C</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="card text-center">
+            <div class="card-header bg-warning text-black">Sat</div>
+            <div class="card-body">
+              <p class="card-text fs-2">☀️</p>
+              <p class="card-text">+31°C</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let isCelsius = true;
+      let city = "";
+
+      function formatDate(myDate) {
+        let weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        let allMonths = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        let date = myDate.getDate();
+        let hour = myDate.getHours();
+        let minutes = myDate.getMinutes();
+        let twoDigitMinutes = minutes.toString().padStart(2, "0");
+        let month = allMonths[myDate.getMonth()];
+        let day = weekDays[myDate.getDay()];
+
+        return `${day}, ${month} ${date}, ${hour} : ${twoDigitMinutes}`;
+      }
+
+      let dateElement = document.querySelector("#current-date-time");
+      dateElement.innerHTML = formatDate(new Date());
+
+      function searchCityName(event) {
+        event.preventDefault();
+        let cityNameInput = document.querySelector("#new-city-input");
+
+        city = cityNameInput.value;
+
+        axios
+          .get(`${apiUrl}?appId=${apiKey}&q=${city}&units=metric`)
+          .then(showTemperature);
+      }
+
+      let searchForm = document.querySelector("#search-form");
+      searchForm.addEventListener("submit", searchCityName);
+
+      let temp = document.querySelector("#current-temp");
+
+      function changeCelToFar(event) {
+        event.preventDefault();
+        if (isCelsius) {
+          let far = 1.8 * temp.innerHTML + 32;
+          temp.innerHTML = far.toFixed();
+          isCelsius = false;
+        }
+      }
+
+      let farTemp = document.querySelector("#farengheit");
+      farTemp.addEventListener("click", changeCelToFar);
+
+      function changeFarToCelsius(event) {
+        event.preventDefault();
+        if (!isCelsius) {
+          let cel = (temp.innerHTML - 32) * 0.5556;
+          temp.innerHTML = cel.toFixed();
+          isCelsius = true;
+        }
+      }
+
+      let celTemp = document.querySelector("#celsius");
+      celTemp.addEventListener("click", changeFarToCelsius);
+
+      let apiKey = "b7a1189e9feeae19225df090063776bd";
+      let apiUrl = "https://api.openweathermap.org/data/2.5/weather";
+
+      function showTemperature(response) {
+        console.log(response.data);
+        let tempData = Math.round(response.data.main.temp);
+        let tempElement = document.querySelector("#current-temp");
+        tempElement.innerHTML = ` ${tempData}`;
+        let cityElement = document.querySelector("#current-city");
+        cityElement.innerHTML = response.data.name;
+      }
+
+      function showCurrentPosition(position) {
+        let latitude = position.coords.latitude;
+
+        let longitude = position.coords.longitude;
+
+        axios
+          .get(
+            `${apiUrl}?appid=${apiKey}&lat=${latitude}&lon=${longitude}&units=metric`
+          )
+          .then(showTemperature);
+      }
+
+      function showLocationTemp(event) {
+        event.preventDefault();
+        navigator.geolocation.getCurrentPosition(showCurrentPosition);
+      }
+
+      let locationButton = document.querySelector("#current-location");
+      locationButton.addEventListener("click", showLocationTemp);
+    </script>
+  </body>
+</html>
