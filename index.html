@@ -70,7 +70,7 @@
             </span>
           </div>
 
-          <p class="current-weather">Sunny</p>
+          <p class="current-weather" id="description">Sunny</p>
           <p id="current-date-time"></p>
         </div>
         <div class="col-6 text-center">
@@ -225,6 +225,8 @@
         tempElement.innerHTML = ` ${tempData}`;
         let cityElement = document.querySelector("#current-city");
         cityElement.innerHTML = response.data.name;
+        let descriptionElement = document.querySelector("#descriprion");
+        descriptionElement.innerHTML = response.data.weather[0].description;
       }
 
       function showCurrentPosition(position) {
