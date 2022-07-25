@@ -3,3 +3,9 @@ li {
   padding: 0;
   text-transform: capitalize;
 }
+
+.surrent-weather {
+  margin: 0;
+  padding: 0;
+  text-transform: capitalize;
+}
