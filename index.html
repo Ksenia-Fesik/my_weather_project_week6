@@ -231,9 +231,9 @@
         let descriptionElement = document.querySelector("#description");
         descriptionElement.innerHTML = response.data.weather[0].description;
         let windElement = document.querySelector("#wind");
-        windElement.innerHTML = `Wind speeid is ${Math.round(
+        windElement.innerHTML = `Wind speed is ${Math.round(
           response.data.wind.speed
-        )}`;
+        )} m`;
       }
 
       function showCurrentPosition(position) {
