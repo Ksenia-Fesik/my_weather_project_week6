@@ -234,7 +234,7 @@
           response.data.wind.speed
         )} m`;
         let weatherIconElemet = document.querySelector("#weather-icon");
-        weatherIconElemet.innerHTML = response.date.weather.icon;
+        weatherIconElemet.innerHTML = response.date.weather[0].icon;
       }
 
       function showCurrentPosition(position) {
