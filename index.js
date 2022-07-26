@@ -74,7 +74,6 @@ let apiKey = "b7a1189e9feeae19225df090063776bd";
 let apiUrl = "https://api.openweathermap.org/data/2.5/weather";
 
 function showTemperature(response) {
-  console.log(response.data);
   let tempData = Math.round(response.data.main.temp);
   let tempElement = document.querySelector("#current-temp");
   tempElement.innerHTML = ` ${tempData}`;
@@ -82,6 +81,15 @@ function showTemperature(response) {
   cityElement.innerHTML = response.data.name;
   let descriptionElement = document.querySelector("#description");
   descriptionElement.innerHTML = response.data.weather[0].description;
+  let windElement = document.querySelector("#wind");
+  windElement.innerHTML = `Wind speed is ${Math.round(
+    response.data.wind.speed
+  )} m/s`;
+  let weatherIconElemet = document.querySelector("#weather-icon");
+  weatherIconElemet.setAttribute(
+    "src",
+    `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
+  );
 }
 
 function showCurrentPosition(position) {
@@ -96,10 +104,10 @@ function showCurrentPosition(position) {
     .then(showTemperature);
 }
 
-function showLocationTemp(event) {
-  event.preventDefault();
-  navigator.geolocation.getCurrentPosition(showCurrentPosition);
-}
+//   function showLocationTemp(event) {
+//     event.preventDefault();
+//     navigator.geolocation.getCurrentPosition(showCurrentPosition);
+//   }
 
-let locationButton = document.querySelector("#current-location");
-locationButton.addEventListener("click", showLocationTemp);
+//   let locationButton = document.querySelector("#current-location");
+//   locationButton.addEventListener("click", showLocationTemp);
