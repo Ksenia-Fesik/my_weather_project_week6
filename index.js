@@ -70,6 +70,34 @@ function changeFarToCelsius(event) {
 let celTemp = document.querySelector("#celsius");
 celTemp.addEventListener("click", changeFarToCelsius);
 
+function displayForecast() {
+  let forecastElement = document.querySelector("#forecast");
+  let forecastHTML = `<div class="row">`;
+  let days = ["Mon", "Tue", "Wed"];
+  days.forEach(function (day) {
+    forecastHTML =
+      forecastHTML +
+      `
+      <div class="col-2">
+        <div class="card text-center">
+          <div class="card-header bg-warning text-black">${day}</div>
+          <div class="card-body">
+            <img
+              class="current-weather-icon"
+              src="http://openweathermap.org/img/wn/04d@2x.png"
+              id="weather-icon"
+            />
+            <p class="card-text">+26°C</p>
+          </div>
+        </div>
+      </div>`;
+  });
+
+  forecastHTML = forecastHTML + `</div>`;
+  forecastElement.innerHTML = forecastHTML;
+}
+displayForecast();
+
 let apiKey = "b7a1189e9feeae19225df090063776bd";
 let apiUrl = "https://api.openweathermap.org/data/2.5/weather";
 
