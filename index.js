@@ -70,24 +70,24 @@ function changeFarToCelsius(event) {
 let celTemp = document.querySelector("#celsius");
 celTemp.addEventListener("click", changeFarToCelsius);
 
-function displayForecast() {
+function displayForecast(response) {
+  let forecast = response.data.daily;
   let forecastElement = document.querySelector("#forecast");
   let forecastHTML = `<div class="row">`;
-  let days = ["Mon", "Tue", "Wed"];
-  days.forEach(function (day) {
+  forecast.forEach(function (forecastDay) {
     forecastHTML =
       forecastHTML +
       `
       <div class="col-2">
         <div class="card text-center">
-          <div class="card-header bg-warning text-black">${day}</div>
+          <div class="card-header bg-warning text-black">${forecastDay.dt}</div>
           <div class="card-body">
             <img
               class="current-weather-icon"
-              src="http://openweathermap.org/img/wn/04d@2x.png"
+              src="http://openweathermap.org/img/wn/${forecastDay.weather[0].icon}@2x.png"
               id="weather-icon"
             />
-            <p class="card-text">+26°C</p>
+            <p class="card-text">${forecastDay.main.temp}°C</p>
           </div>
         </div>
       </div>`;
@@ -104,7 +104,6 @@ function getForecast(coordinates) {
   console.log(coordinates);
   let apiKey = "b7a1189e9feeae19225df090063776bd";
   let apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=metric`;
-  console.log(apiUrl);
   axios.get(apiUrl).then(displayForecast);
 }
 
