@@ -9,3 +9,13 @@ li {
   padding: 0;
   text-transform: capitalize;
 }
+.my-weather-project h1 {
+  margin: 0;
+  padding: 0;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 40px;
+}
+
+.my-weather-project {
+  background-color: #f57c00;
+}

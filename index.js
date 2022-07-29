@@ -135,7 +135,7 @@ function showTemperature(response) {
   let weatherIconElemet = document.querySelector("#weather-icon");
   weatherIconElemet.setAttribute(
     "src",
-    `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
+    `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@4x.png`
   );
   getForecast(response.data.coord);
 }
@@ -151,11 +151,22 @@ function showCurrentPosition(position) {
     )
     .then(showTemperature);
 }
+function showCurrentPosition(position) {
+  let latitude = position.coords.latitude;
 
-//   function showLocationTemp(event) {
-//     event.preventDefault();
-//     navigator.geolocation.getCurrentPosition(showCurrentPosition);
-//   }
+  let longitude = position.coords.longitude;
 
-//   let locationButton = document.querySelector("#current-location");
-//   locationButton.addEventListener("click", showLocationTemp);
+  axios
+    .get(
+      `${apiUrl}?appid=${apiKey}&lat=${latitude}&lon=${longitude}&units=metric`
+    )
+    .then(showTemperature);
+}
+
+function showLocationTemp(event) {
+  event.preventDefault();
+  navigator.geolocation.getCurrentPosition(showCurrentPosition);
+}
+
+let locationButton = document.querySelector("#current-location");
+window.addEventListener("load", showLocationTemp);
